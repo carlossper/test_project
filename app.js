@@ -43,7 +43,9 @@ var loginRouter = require('./routes/api/login');
 var usersRouter = require('./routes/api/users');
 var regstRouter = require('./routes/api/register');
 var studiesRouter = require('./routes/api/studies');
+// APIs 
 var apisRouter = require('./routes/api/apis');
+var ensemblRouter = require('./routes/api/ensembl');
 
 //app.use('/', loginRouter);
 app.use('/', indexRouter);
@@ -52,6 +54,8 @@ app.use('/register_user', regstRouter);
 app.use('/users', usersRouter);
 app.use('/user_list', usersRouter);
 app.use('/studies', studiesRouter);
+app.use('/apis', apisRouter);
+app.use('/ensembl/:service', ensemblRouter);
 
 
 app.get("/secret",function(req, res){    

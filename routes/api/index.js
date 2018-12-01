@@ -6,5 +6,6 @@ router.use('/register', require('./register'));
 router.use('/register_user', require('./register'));
 router.use('/studies', require('./studies'));
 router.use('/apis', require('./apis'));
+router.use('/ensembl', require('./ensembl'));
 
 module.exports = router;

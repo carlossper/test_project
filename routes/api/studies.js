@@ -30,7 +30,7 @@ router.get('/species_ensembl', ensureAuthenticated,function(req, res) {
 router.get('/species_ex2', ensureAuthenticated,function(req, res) {
   //res.render('studies', {title: 'Public Studies', user: req.user});
   var request = require('request');
-  request('https://localhost:3500/species', function (error, response, body) {
+  request('http://localhost:8080/lookup/20/0', function (error, response, body) {
     console.log(response);
   });
 });
