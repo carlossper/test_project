@@ -1,0 +1,8 @@
+db: ensembl_db
+
+db.requestcollection.insert({
+	"species" : "test", 
+	"req_type": "test req type", 
+	"format" : "format test", 
+	"feature" : "feature test"}
+	)
