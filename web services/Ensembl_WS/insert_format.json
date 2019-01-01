@@ -6,3 +6,7 @@ db.requestcollection.insert({
 	"format" : "format test", 
 	"feature" : "feature test"}
 	)
+
+{"species" : "test", "req_type": "lookup", "format" : "format test", "feature" : "feature test"}
+
+{ $and : [{req_type: request_type}, {species: species_id}] }

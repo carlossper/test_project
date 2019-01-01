@@ -3,9 +3,12 @@ var port = 8080;
 var ws = express();
 
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost:27018');
+//var db = mongoose.connect('mongodb://localhost:27017/ensembl_bd', { useNewUrlParser: true });
 
 const request = require('request');
+
+var db = require('./db');
+var Studies = require('./models/study');
 
 // lookup handlers
 ws.get("/lookup/:id/:expand", (req, resp, next) => {
@@ -13,9 +16,9 @@ ws.get("/lookup/:id/:expand", (req, resp, next) => {
 	let id = req.params.id;
 	let expand = req.params.expand;
 
-	// check if lookup for id is already in the mongo db (findOne) tut luiz
-	
-
+	Studies.getRequestsByType('lookup', function(err, studies) {
+		console.log(studies);
+	});
 
 	// forming response request
 	let url = "https://rest.ensembl.org/lookup/id/" + id + "?expand=" + expand + ";content-type=application/json";
@@ -26,11 +29,8 @@ ws.get("/lookup/:id/:expand", (req, resp, next) => {
 			return console.log(err);
 		}
 
-		console.log(body);
+		//console.log(body);
 		return resp.send(body);
-
-		
-
 	});
 });
 
