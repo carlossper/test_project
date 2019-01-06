@@ -6,10 +6,11 @@ mongoose.connect('mongodb://localhost:27017/ensembl_db', { useNewUrlParser: true
 
 // Studies
 var ensembl_study_schema = new mongoose.Schema({
-	species : String,
+	speciesId : String,
 	req_type : String,
 	format : String,
-	feature : String
+	feature : String,
+	dataset : Object
 	}, {collection : 'requestcollection' }
 );
 

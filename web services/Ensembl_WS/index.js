@@ -16,21 +16,52 @@ ws.get("/lookup/:id/:expand", (req, resp, next) => {
 	let id = req.params.id;
 	let expand = req.params.expand;
 
-	Studies.getRequestsByType('lookup', function(err, studies) {
-		console.log(studies);
-	});
+	Studies.getRequestByTypeAndSpeciesId("lookup", id, function(err, studies) {
+		//has to make new request to ensembl ws
+		if(studies.length == 0) 
+		{
+			console.log("No study found in ws db");
 
-	// forming response request
-	let url = "https://rest.ensembl.org/lookup/id/" + id + "?expand=" + expand + ";content-type=application/json";
+			// forming response request
+			let url = "https://rest.ensembl.org/lookup/id/" + id + "?expand=" + expand + ";content-type=application/json";
 
-	// http request to ensembl api
-	request(url, {json: true}, (err, res, body) => {
-		if(err) {
-			return console.log(err);
+			// http request to ensembl api
+			request(url, {json: true}, (err, res, body) => {
+				if(err) return console.log(err);
+
+				//console.log(body);
+				var ensembl_response = body;
+
+				//builds collection object and insert in mongodb
+				var new_study = new Studies(
+					{
+						speciesId: id, 
+						req_type: "lookup", 
+						format: "n/a for lookup", 
+						feature: "n/a for lookup",
+						dataset: ensembl_response
+					});
+
+				new_study.save(Studies, function(err, succ) {
+					if(err) return console.log(err);
+
+					else return console.log("Success");
+				});
+
+				//sends the new object as this ws response
+				return resp.send(new_study);
+			});
 		}
-
-		//console.log(body);
-		return resp.send(body);
+		else if(studies.length == 1) //study already done: can retrieve from local db
+		{
+			console.log("One study found! Study: " + studies);
+			return resp.send(studies);
+		}
+		else
+		{
+			console.log("More than one study found!");
+			return resp.send("More than one study found, something went wrong!");
+		}
 	});
 });
 
